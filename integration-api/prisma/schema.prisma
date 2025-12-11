@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SensorData {
+  id            Int      @id @default(autoincrement())
+  device_id     String
+  device_imei   String
+  timestamp     BigInt
+  provider      String
+  type          String
+  temperature   Float?
+  humidity      Float?
+  light_level   Float?
+  created_at    DateTime @default(now())
+  accelerometer Json?
+  box_open      Boolean?
+  tilt          Json?
+
+  @@map("sensor_data")
+}
+
+model LocationData {
+  id                         Int      @id @default(autoincrement())
+  device_id                  String
+  device_imei                String
+  timestamp                  BigInt
+  provider                   String
+  type                       String
+  latitude                   Float
+  longitude                  Float
+  altitude                   Float?
+  location_accuracy          Int?
+  location_accuracy_category String?
+  location_source            String?
+  battery_level              Int?
+  cellular_dbm               Float?
+  wifi_access_points         Int?
+  created_at                 DateTime @default(now())
+  address                    Json?
+  cellular_network_type      String?
+  cellular_operator          String?
+
+  @@map("location_data")
+}
