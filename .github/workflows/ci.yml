@@ -38,6 +38,9 @@ jobs:
         npm test
     
     - name: Build Integration API
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        API_KEY: ${{ secrets.API_KEY }}
       run: |
         cd integration-api
         npm run build

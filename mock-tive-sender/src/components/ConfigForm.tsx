@@ -15,7 +15,7 @@ export default function ConfigForm({ apiUrl, apiKey, onApiUrlChange, onApiKeyCha
           value={apiUrl}
           onChange={(e) => onApiUrlChange(e.target.value)}
           className="w-full p-2 border rounded"
-          placeholder="https://your-integration-api.vercel.app/api/webhook/tive"
+          placeholder="https://paxafe-assessment.vercel.app/api/webhook/tive"
         />
       </div>
       
