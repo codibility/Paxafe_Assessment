@@ -1,0 +1,74 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: |
+          integration-api/package-lock.json
+          mock-tive-sender/package-lock.json
+    
+    - name: Install Integration API dependencies
+      run: |
+        cd integration-api
+        npm ci
+    
+    - name: Install Mock Sender dependencies
+      run: |
+        cd mock-tive-sender
+        npm ci
+    
+    - name: Run Integration API tests
+      run: |
+        cd integration-api
+        npm test
+    
+    - name: Build Integration API
+      run: |
+        cd integration-api
+        npm run build
+    
+    - name: Build Mock Sender
+      run: |
+        cd mock-tive-sender
+        npm run build
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy Integration API to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_API }}
+        working-directory: ./integration-api
+        vercel-args: '--prod'
+    
+    - name: Deploy Mock Sender to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_SENDER }}
+        working-directory: ./mock-tive-sender
+        vercel-args: '--prod'
