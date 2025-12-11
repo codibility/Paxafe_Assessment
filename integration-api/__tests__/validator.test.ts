@@ -34,14 +34,14 @@ describe('Validator', () => {
       const invalidLat = { ...validPayload, Location: { Latitude: 91, Longitude: 0 } };
       const result = validateTivePayload(invalidLat);
       expect(result.valid).toBe(false);
-      expect(result.errors?.[0]).toContain('maximum');
+      expect(result.errors?.[0]).toContain('<= 90');
     });
 
     it('validates longitude range', () => {
       const invalidLng = { ...validPayload, Location: { Latitude: 0, Longitude: -181 } };
       const result = validateTivePayload(invalidLng);
       expect(result.valid).toBe(false);
-      expect(result.errors?.[0]).toContain('minimum');
+      expect(result.errors?.[0]).toContain('>= -180');
     });
 
     it('accepts null temperature values', () => {
@@ -54,21 +54,21 @@ describe('Validator', () => {
       const invalidTemp = { ...validPayload, Temperature: { Celsius: 'hot' } };
       const result = validateTivePayload(invalidTemp);
       expect(result.valid).toBe(false);
-      expect(result.errors?.[0]).toContain('type');
+      expect(result.errors?.[0]).toContain('number,null');
     });
 
     it('validates EntryTimeEpoch as integer', () => {
       const invalidTime = { ...validPayload, EntryTimeEpoch: 'not-a-number' };
       const result = validateTivePayload(invalidTime);
       expect(result.valid).toBe(false);
-      expect(result.errors?.[0]).toContain('type');
+      expect(result.errors?.[0]).toContain('integer');
     });
 
     it('rejects negative EntryTimeEpoch', () => {
       const negativeTime = { ...validPayload, EntryTimeEpoch: -1 };
       const result = validateTivePayload(negativeTime);
       expect(result.valid).toBe(false);
-      expect(result.errors?.[0]).toContain('minimum');
+      expect(result.errors?.[0]).toContain('>= 0');
     });
   });
 

@@ -9,5 +9,13 @@ export async function getRecentData() {
     getRecentLocationData()
   ]);
   
-  return { sensors, locations };
+  return { 
+    sensors, 
+    locations,
+    fetchedAt: new Date().toISOString(),
+    counts: {
+      sensors: sensors.length,
+      locations: locations.length
+    }
+  };
 }

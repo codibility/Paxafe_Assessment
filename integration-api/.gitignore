@@ -6,3 +6,5 @@ dist/
 *.log
 logs/
 /generated/prisma
+.vercel
+.env*.local
