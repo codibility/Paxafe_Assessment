@@ -131,11 +131,20 @@ npm run dev
 ```
 
 ### 5. Test the Pipeline
+
+**Local Development:**
 1. Open http://localhost:3003 (Mock Sender)
 2. Configure API endpoint: http://localhost:3005/api/webhook/tive
 3. Set API key: paxafe-test-key-2024
 4. Send test payloads
 5. View data at http://localhost:3005
+
+**Deployed Version:**
+1. Open https://mock-tive-sender.vercel.app/ (Mock Sender)
+2. Configure API endpoint: https://paxafe-assessment.vercel.app/api/webhook/tive
+3. Set API key: paxafe-test-key-2024
+4. Send test payloads
+5. View data at https://paxafe-assessment.vercel.app/
 
 ## Database Migration Guide
 
@@ -223,8 +232,9 @@ vercel --prod
 ## API Usage Examples
 
 ### Webhook Endpoint
+
+**Local:**
 ```bash
-# Send payload to Integration API
 curl -X POST http://localhost:3005/api/webhook/tive \
   -H "Content-Type: application/json" \
   -H "x-api-key: paxafe-test-key-2024" \
@@ -237,16 +247,42 @@ curl -X POST http://localhost:3005/api/webhook/tive \
   }'
 ```
 
-### Data Retrieval
+**Deployed:**
 ```bash
-# Get recent sensor and location data
+curl -X POST https://paxafe-assessment.vercel.app/api/webhook/tive \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: paxafe-test-key-2024" \
+  -d '{
+    "DeviceId": "863257063350583",
+    "DeviceName": "A571992",
+    "EntryTimeEpoch": 1739215646000,
+    "Temperature": {"Celsius": 10.08},
+    "Location": {"Latitude": 40.81, "Longitude": -73.88}
+  }'
+```
+
+### Data Retrieval
+
+**Local:**
+```bash
 curl http://localhost:3005/api/data
 ```
 
-### Health Check
+**Deployed:**
 ```bash
-# Check webhook endpoint status
+curl https://paxafe-assessment.vercel.app/api/data
+```
+
+### Health Check
+
+**Local:**
+```bash
 curl http://localhost:3005/api/webhook/tive
+```
+
+**Deployed:**
+```bash
+curl https://paxafe-assessment.vercel.app/api/health
 ```
 
 This implementation focuses on correctness, reliability, and maintainability while keeping the codebase minimal and production-ready.
